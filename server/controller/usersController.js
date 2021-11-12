@@ -1,6 +1,6 @@
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../../database/models/user");
-
 require("dotenv").config();
 
 const registerUser = async (req, res, next) => {
@@ -21,4 +21,33 @@ const registerUser = async (req, res, next) => {
   }
 };
 
-module.exports = registerUser;
+const loginRegister = async (req, res, next) => {
+  const { username, password } = req.body;
+
+  const user = await User.findOne({ username });
+
+  if (!user) {
+    const error = new Error("Incorrect details!");
+    error.code = 401;
+    next(error);
+  } else {
+    const correctPassword = await bcrypt.compare(password, user.password);
+
+    if (!correctPassword) {
+      const error = new Error("Incorrect details!!");
+      error.code = 401;
+      next(error);
+    } else {
+      const token = await jwt.sign(
+        {
+          name: user.name,
+          surname: user.username,
+        },
+        process.env.JWT_SECRET
+      );
+      res.json({ token });
+    }
+  }
+};
+
+module.exports = { registerUser, loginRegister };
