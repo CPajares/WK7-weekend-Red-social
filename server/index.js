@@ -1,3 +1,4 @@
+require("dotenv").config();
 const chalk = require("chalk");
 const express = require("express");
 const cors = require("cors");
@@ -8,7 +9,6 @@ const app = express();
 const initializeServer = (port) =>
   new Promise((resolve, reject) => {
     const server = app.listen(port, () => {
-      console.log("Dentro");
       debug(chalk.yellow(`Server on, lisen at ${port}`));
       resolve(server);
     });
