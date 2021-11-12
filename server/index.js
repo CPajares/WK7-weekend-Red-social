@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const debug = require("debug")("socialNet:server");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 const initializeServer = (port) =>
@@ -21,5 +22,7 @@ const initializeServer = (port) =>
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
+
+app.use("/user", userRoutes);
 
 module.exports = initializeServer;
