@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const author = (req, res, next) => {
+  console.log("aqui");
   const authHeader = req.header("Authorization");
   if (!authHeader) {
     const error = new Error("Not authorised, missing token");
@@ -17,8 +18,7 @@ const author = (req, res, next) => {
       try {
         const user = jwt.verify(token, process.env.JWT_SECRET);
 
-        req.userData = user.id;
-
+        req.userData = user.surname;
         next();
       } catch {
         const error = new Error("Not authorized!");

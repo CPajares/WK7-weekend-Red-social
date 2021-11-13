@@ -4,6 +4,14 @@ const debug = require("debug")("socialNet:DB");
 
 const initiateDB = (conectingString) =>
   new Promise((resolve, reject) => {
+    mongoose.set("toJSON", {
+      virtuals: true,
+      transform: (doc, ret) => {
+        delete ret._id;
+        delete ret.__v;
+      },
+    });
+
     mongoose.connect(conectingString, (error) => {
       if (error) {
         debug(chalk.red("Not possible to conect DB."));

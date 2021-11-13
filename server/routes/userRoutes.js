@@ -11,8 +11,6 @@ const router = express.Router();
 
 router.post("/register", registerUser);
 
-router.get("/");
-
 router.post("/login", validate(loginRequestSchema), loginRegister);
 
 module.exports = router;
