@@ -5,6 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const debug = require("debug")("socialNet:server");
 const userRoutes = require("./routes/userRoutes");
+const crancRoutes = require("./routes/crancRoutes");
 const {
   notFoundErrorHandler,
   generalErrorHandler,
@@ -28,6 +29,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/user", userRoutes);
+app.use("/cranc", crancRoutes);
+
 module.exports = initializeServer;
 
 app.use(notFoundErrorHandler);
