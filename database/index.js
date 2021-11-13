@@ -7,7 +7,9 @@ const initiateDB = (conectingString) =>
     mongoose.set("toJSON", {
       virtuals: true,
       transform: (doc, ret) => {
+        // eslint-disable-next-line no-underscore-dangle
         delete ret._id;
+        // eslint-disable-next-line no-underscore-dangle
         delete ret.__v;
       },
     });
