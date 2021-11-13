@@ -1,5 +1,7 @@
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../../database/models/user");
-const { registerUser } = require("./usersController");
+const { registerUser, loginRegister } = require("./usersController");
 
 jest.mock("../../database/models/user");
 
@@ -67,6 +69,79 @@ describe("Given a registerUser function", () => {
         "message",
         "Not valid inputs"
       );
+    });
+  });
+});
+
+describe("Given a loginRegister function", () => {
+  describe("When it receives a req and incorrect username", () => {
+    test("Should it call next with and error", async () => {
+      const req = {
+        body: {
+          username: "fail",
+          password: "sandia",
+        },
+      };
+      const next = jest.fn();
+      const error = new Error("Incorrect details!");
+      error.code = 401;
+      User.findOne = jest.fn().mockResolvedValue(null);
+
+      await loginRegister(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+
+  describe("When it receives a req and incorrect password", () => {
+    test("Should it called next with and error", async () => {
+      const req = {
+        body: {
+          username: "fail",
+          password: "sandia",
+        },
+      };
+      const next = jest.fn();
+      const error = new Error("Incorrect details!!");
+      error.code = 401;
+      User.findOne = jest.fn().mockResolvedValue({});
+      bcrypt.compare = jest.fn().mockResolvedValue(false);
+
+      await loginRegister(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
+    });
+  });
+
+  describe("When it receives a req and res objects", () => {
+    test("Should it called json method", async () => {
+      const req = {
+        body: {
+          username: "Pan",
+          password: "sandia",
+        },
+      };
+      const res = {
+        json: jest.fn(),
+      };
+
+      const user = {
+        username: "Pan",
+        password: "sandia",
+      };
+      const expectedtoken = "tokenSuperSeguro";
+
+      const expectedResponse = {
+        token: expectedtoken,
+      };
+      User.findOne = jest.fn().mockResolvedValue(user);
+      bcrypt.compare = jest.fn().mockResolvedValue(true);
+      jwt.sign = jest.fn().mockReturnValue(expectedtoken);
+
+      await loginRegister(req, res);
+
+      expect(res.json).toHaveBeenCalledWith(expectedResponse);
     });
   });
 });
