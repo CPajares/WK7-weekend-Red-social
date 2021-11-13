@@ -40,8 +40,12 @@ const loginRegister = async (req, res, next) => {
     } else {
       const token = await jwt.sign(
         {
+          id: user.id,
           name: user.name,
           surname: user.username,
+          age: user.age,
+          friends: user.friends,
+          enemies: user.enemies,
         },
         process.env.JWT_SECRET
       );

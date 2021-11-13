@@ -16,7 +16,9 @@ const auth = (req, res, next) => {
     } else {
       try {
         const user = jwt.verify(token, process.env.JWT_SECRET);
-        req.userId = user.userId;
+
+        req.userData = user.id;
+
         next();
       } catch {
         const error = new Error("Not authorized!");
