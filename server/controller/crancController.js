@@ -29,4 +29,17 @@ const addFriend = async (req, res, next) => {
   }
 };
 
-module.exports = { getUsers, addFriend };
+const getFriends = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ username: req.userData }).populate({
+      path: "friends",
+    });
+    res.json(user);
+  } catch {
+    const error = new Error("Error while looking for friends");
+    error.code = 401;
+    next(error);
+  }
+};
+
+module.exports = { getUsers, addFriend, getFriends };
