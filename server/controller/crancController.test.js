@@ -1,5 +1,5 @@
 const User = require("../../database/models/user");
-const { getUsers } = require("./crancController");
+const { getUsers, getFriends } = require("./crancController");
 
 describe("Given a getUsers function", () => {
   describe("When it´s receive a res object", () => {
@@ -28,6 +28,22 @@ describe("Given a getUsers function", () => {
         "message",
         expectedError.message
       );
+    });
+  });
+});
+
+describe("Given a addFriends function", () => {
+  describe("When it receives a res object", () => {
+    test("Should it call json method", async () => {
+      const next = jest.fn();
+      const error = new Error("Error while looking for friends");
+      error.code = 401;
+
+      User.findOne = jest.fn().mockRejectedValue(error);
+
+      await getFriends(null, null, next);
+
+      expect(next).toHaveBeenCalled();
     });
   });
 });
