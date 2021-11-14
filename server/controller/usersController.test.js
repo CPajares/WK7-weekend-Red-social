@@ -83,7 +83,7 @@ describe("Given a loginRegister function", () => {
         },
       };
       const next = jest.fn();
-      const error = new Error("Incorrect details!");
+      const error = new Error("Incorrect details");
       error.code = 401;
       User.findOne = jest.fn().mockResolvedValue(null);
 
