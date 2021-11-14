@@ -27,7 +27,7 @@ const loginRegister = async (req, res, next) => {
   const user = await User.findOne({ username });
 
   if (!user) {
-    const error = new Error("Incorrect details!");
+    const error = new Error("Incorrect details");
     error.code = 401;
     next(error);
   } else {
