@@ -15,9 +15,8 @@ const author = (req, res, next) => {
       next(error);
     } else {
       try {
-        const user = jwt.verify(token, process.env.JWT_SECRET);
-
-        req.userData = user.surname;
+        const { surname, name } = jwt.verify(token, process.env.JWT_SECRET);
+        req.userData = { surname, name };
         next();
       } catch {
         const error = new Error("Not authorized!");
