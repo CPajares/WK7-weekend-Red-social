@@ -1,9 +1,10 @@
 const User = require("../../database/models/user");
 
 const getUsers = async (req, res, next) => {
+  const { name } = req.userData;
   try {
-    const user = await User.find();
-    res.json(user);
+    const users = await User.find({ name: { $ne: name } });
+    res.json(users);
   } catch {
     const error = new Error("Not found!");
     error.code = 401;
