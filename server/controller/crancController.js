@@ -16,7 +16,8 @@ const addFriend = async (req, res, next) => {
   try {
     const { id } = req.body;
     const friend = await User.findOne({ _id: id });
-    const user = await User.findOne({ username: req.userData });
+
+    const user = await User.findOne({ username: req.userData.surname });
 
     // eslint-disable-next-line no-underscore-dangle
     user.friends = [...user.friends, friend._id];
